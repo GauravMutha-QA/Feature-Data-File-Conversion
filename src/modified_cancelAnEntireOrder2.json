@@ -1,0 +1,964 @@
+{
+    "scenario": {
+        "id": "cancelAnEntireOrder2",
+        "description": "This feature is to test cancelling an entire order (New features)",
+        "params": [
+            {
+                "name": "Auto_orderId05_"
+            },
+            {
+                "name": "Auto_orderId05_lineId01_"
+            },
+            {
+                "name": "Auto_orderId05_lineId02_"
+            },
+            {
+                "name": "Auto_orderId05_lineId03_"
+            },
+            {
+                "name": "Auto_orderId05_lineId04_"
+            },
+            {
+                "name": "Auto_orderId05_lineId05_"
+            },
+            {
+                "name": "Auto_orderId06_"
+            },
+            {
+                "name": "Auto_orderId06_lineId01_"
+            },
+            {
+                "name": "Auto_orderId06_lineId02_"
+            },
+            {
+                "name": "Auto_orderId06_lineId03_"
+            },
+            {
+                "name": "Auto_orderId06_lineId04_"
+            },
+            {
+                "name": "Auto_orderId07_"
+            },
+            {
+                "name": "Auto_orderId07_lineId01_"
+            },
+            {
+                "name": "Auto_orderId07_lineId02_"
+            },
+            {
+                "name": "Auto_orderId07_lineId03_"
+            },
+            {
+                "name": "Auto_orderId07_lineId04_"
+            },
+            {
+                "name": "Auto_orderId08_"
+            },
+            {
+                "name": "Auto_orderId08_lineId01_"
+            },
+            {
+                "name": "Auto_orderId08_lineId02_"
+            },
+            {
+                "name": "Auto_orderId08_lineId03_"
+            },
+            {
+                "name": "Auto_orderId08_lineId04_"
+            },
+            {
+                "name": "Auto_orderId09_"
+            },
+            {
+                "name": "Auto_orderId09_lineId01_"
+            }
+        ],
+        "timestamp": [
+            {
+                "name": "futureDateTimestamp_01",
+                "unit": "day",
+                "offset": "+1",
+                "format": "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+                "tz": "UTC"
+            },
+            {
+                "name": "futureDateTimestamp_02",
+                "unit": "day",
+                "offset": "+2",
+                "format": "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+                "tz": "UTC"
+            },
+            {
+                "name": "futureDateTimestamp_03",
+                "unit": "day",
+                "offset": "+2",
+                "format": "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+                "tz": "UTC"
+            }
+        ],
+        "steps": {
+            "getOrderDetails__cancelAnEntireOrder2TC05SS02GETOrderDetails": {
+                "basePath": "/order/${Auto_orderId05_}",
+                "doNotCompare": [
+                    {
+                        "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].estimatedShipDate"
+                    }
+                ]
+            },
+            "getFulfillmentOrderId__cancelAnEntireOrder2TC05SS02GETFulfillmentOrderId": {
+                "basePath": "/order/${Auto_orderId05_}/fulfillment-orders",
+                "doNotCompare": [
+                    {
+                        "path": "payload"
+                    },
+                    {
+                        "path": "timestamp"
+                    },
+                    {
+                        "path": "requestId"
+                    }
+                ],
+                "paramsToSave": [
+                    {
+                        "name": "Auto_fulfillmentOrderId05_",
+                        "value": "payload[0].fulfillmentOrderId"
+                    },
+                    {
+                        "name": "Auto_fulfillmentOrderId05_lineId01_",
+                        "value": "payload[0].fulfillmentOrderLines[0].fulfillmentLineId"
+                    },
+                    {
+                        "name": "Auto_fulfillmentOrderId05_lineId02_",
+                        "value": "payload[0].fulfillmentOrderLines[1].fulfillmentLineId"
+                    },
+                    {
+                        "name": "Auto_fulfillmentOrderId05_lineId03_",
+                        "value": "payload[0].fulfillmentOrderLines[2].fulfillmentLineId"
+                    },
+                    {
+                        "name": "Auto_fulfillmentOrderId05_lineId04_",
+                        "value": "payload[0].fulfillmentOrderLines[3].fulfillmentLineId"
+                    },
+                    {
+                        "name": "Auto_fulfillmentOrderId05_lineId05_",
+                        "value": "payload[0].fulfillmentOrderLines[4].fulfillmentLineId"
+                    }
+                ]
+            },
+            "getfoDetails__cancelAnEntireOrder2TC05SS03GETFODetails": {
+                "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId05_}",
+                "doNotCompare": [
+                    {
+                        "path": "fulfillmentOrderLines[*].sourcingId"
+                    },
+                    {
+                        "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+                    }
+                ]
+            },
+            "getOrderDetails__cancelAnEntireOrder2TC05SS05GETOrderDetails": {
+                "basePath": "/order/${Auto_orderId05_}",
+                "doNotCompare": [
+                    {
+                        "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].estimatedShipDate"
+                    }
+                ]
+            },
+            "getfoDetails__cancelAnEntireOrder2TC05SS06GETFODetails": {
+                "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId05_}",
+                "doNotCompare": [
+                    {
+                        "path": "fulfillmentOrderLines[*].sourcingId"
+                    },
+                    {
+                        "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+                    }
+                ]
+            },
+            "getOrderDetails__cancelAnEntireOrder2TC05SS08GETOrderDetails": {
+                "basePath": "/order/${Auto_orderId05_}",
+                "doNotCompare": [
+                    {
+                        "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].estimatedShipDate"
+                    }
+                ]
+            },
+            "getfoDetails__cancelAnEntireOrder2TC05SS09GETFODetails": {
+                "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId05_}",
+                "doNotCompare": [
+                    {
+                        "path": "fulfillmentOrderLines[*].sourcingId"
+                    },
+                    {
+                        "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+                    }
+                ]
+            },
+            "cancelOrderLines__cancelAnEntireOrder2TC05SS10CancelOrderLines": {
+                "basePath": "/order/${Auto_orderId05_}",
+                "doNotCompare": []
+            },
+            "getOrderDetails__cancelAnEntireOrder2TC05SS13GETOrderDetails": {
+                "basePath": "/order/${Auto_orderId05_}",
+                "doNotCompare": [
+                    {
+                        "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].estimatedShipDate"
+                    }
+                ]
+            },
+            "getfoDetails__cancelAnEntireOrder2TC05SS14GETFODetails": {
+                "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId05_}",
+                "doNotCompare": [
+                    {
+                        "path": "fulfillmentOrderLines[*].sourcingId"
+                    },
+                    {
+                        "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+                    }
+                ]
+            },
+            "cancelOrder__cancelAnEntireOrder2TC05SS15CancelOrder": {
+                "basePath": "/order/${Auto_orderId05_}",
+                "doNotCompare": [
+                    {
+                        "path": "requestId"
+                    },
+                    {
+                        "path": "timestamp"
+                    }
+                ]
+            },
+            "getOrderDetails__cancelAnEntireOrder2TC05SS18GETOrderDetails": {
+                "basePath": "/order/${Auto_orderId05_}",
+                "doNotCompare": [
+                    {
+                        "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].estimatedShipDate"
+                    }
+                ]
+            },
+            "getfoDetails__cancelAnEntireOrder2TC05SS19GETFODetails": {
+                "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId05_}",
+                "doNotCompare": [
+                    {
+                        "path": "fulfillmentOrderLines[*].sourcingId"
+                    },
+                    {
+                        "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+                    }
+                ]
+            },
+            "getOrderDetails__cancelAnEntireOrder2TC06SS02GETOrderDetails": {
+                "basePath": "/order/${Auto_orderId06_}",
+                "doNotCompare": [
+                    {
+                        "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].estimatedShipDate"
+                    }
+                ]
+            },
+            "getFulfillmentOrderId__cancelAnEntireOrder2TC06SS02GETFulfillmentOrderId": {
+                "basePath": "/order/${Auto_orderId06_}/fulfillment-orders",
+                "doNotCompare": [
+                    {
+                        "path": "payload"
+                    },
+                    {
+                        "path": "timestamp"
+                    },
+                    {
+                        "path": "requestId"
+                    }
+                ],
+                "paramsToSave": [
+                    {
+                        "name": "Auto_fulfillmentOrderId06_",
+                        "value": "payload[0].fulfillmentOrderId"
+                    },
+                    {
+                        "name": "Auto_fulfillmentOrderId06_lineId01_",
+                        "value": "payload[0].fulfillmentOrderLines[0].fulfillmentLineId"
+                    },
+                    {
+                        "name": "Auto_fulfillmentOrderId06_lineId02_",
+                        "value": "payload[0].fulfillmentOrderLines[1].fulfillmentLineId"
+                    },
+                    {
+                        "name": "Auto_fulfillmentOrderId06_lineId03_",
+                        "value": "payload[0].fulfillmentOrderLines[2].fulfillmentLineId"
+                    }
+                ]
+            },
+            "getfoDetails__cancelAnEntireOrder2TC06SS03GETFODetails": {
+                "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId06_}",
+                "doNotCompare": [
+                    {
+                        "path": "fulfillmentOrderLines[*].sourcingId"
+                    },
+                    {
+                        "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+                    }
+                ]
+            },
+            "addingNewLine__cancelAnEntireOrder2TC06SS04AddingNewLine": {
+                "basePath": "/order/${Auto_orderId06_}",
+                "doNotCompare": [
+                    {
+                        "path": "timestamp"
+                    },
+                    {
+                        "path": "requestId"
+                    }
+                ]
+            },
+            "getOrderDetails__cancelAnEntireOrder2TC06SS07GETOrderDetails": {
+                "basePath": "/order/${Auto_orderId06_}",
+                "doNotCompare": [
+                    {
+                        "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].estimatedShipDate"
+                    }
+                ]
+            },
+            "getfoDetails__cancelAnEntireOrder2TC06SS08GETFODetails": {
+                "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId06_}",
+                "doNotCompare": [
+                    {
+                        "path": "fulfillmentOrderLines[*].sourcingId"
+                    },
+                    {
+                        "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+                    }
+                ]
+            },
+            "cancelOrder__cancelAnEntireOrder2TC06SS09CancelOrder": {
+                "basePath": "/order/${Auto_orderId06_}",
+                "doNotCompare": [
+                    {
+                        "path": "requestId"
+                    },
+                    {
+                        "path": "timestamp"
+                    }
+                ]
+            },
+            "getOrderDetails__cancelAnEntireOrder2TC06SS12GETOrderDetails": {
+                "basePath": "/order/${Auto_orderId06_}",
+                "doNotCompare": [
+                    {
+                        "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].estimatedShipDate"
+                    }
+                ]
+            },
+            "getfoDetails__cancelAnEntireOrder2TC06SS13GETFODetails": {
+                "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId06_}",
+                "doNotCompare": [
+                    {
+                        "path": "fulfillmentOrderLines[*].sourcingId"
+                    },
+                    {
+                        "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+                    }
+                ]
+            },
+            "getOrderDetails__cancelAnEntireOrder2TC07SS02GETOrderDetails": {
+                "basePath": "/order/${Auto_orderId07_}",
+                "doNotCompare": [
+                    {
+                        "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].estimatedShipDate"
+                    }
+                ]
+            },
+            "getFulfillmentOrderId__cancelAnEntireOrder2TC07SS02GETFulfillmentOrderId": {
+                "basePath": "/order/${Auto_orderId07_}/fulfillment-orders",
+                "doNotCompare": [
+                    {
+                        "path": "payload"
+                    },
+                    {
+                        "path": "timestamp"
+                    },
+                    {
+                        "path": "requestId"
+                    }
+                ],
+                "paramsToSave": [
+                    {
+                        "name": "Auto_fulfillmentOrderId07_",
+                        "value": "payload[0].fulfillmentOrderId"
+                    },
+                    {
+                        "name": "Auto_fulfillmentOrderId07_lineId01_",
+                        "value": "payload[0].fulfillmentOrderLines[0].fulfillmentLineId"
+                    },
+                    {
+                        "name": "Auto_fulfillmentOrderId07_lineId02_",
+                        "value": "payload[0].fulfillmentOrderLines[1].fulfillmentLineId"
+                    },
+                    {
+                        "name": "Auto_fulfillmentOrderId07_lineId03_",
+                        "value": "payload[0].fulfillmentOrderLines[2].fulfillmentLineId"
+                    }
+                ]
+            },
+            "getfoDetails__cancelAnEntireOrder2TC07SS03GETFODetails": {
+                "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId07_}",
+                "doNotCompare": [
+                    {
+                        "path": "fulfillmentOrderLines[*].sourcingId"
+                    },
+                    {
+                        "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+                    }
+                ]
+            },
+            "getOrderDetails__cancelAnEntireOrder2TC07SS05GETOrderDetails": {
+                "basePath": "/order/${Auto_orderId07_}",
+                "doNotCompare": [
+                    {
+                        "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].estimatedShipDate"
+                    }
+                ]
+            },
+            "getfoDetails__cancelAnEntireOrder2TC07SS06GETFODetails": {
+                "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId07_}",
+                "doNotCompare": [
+                    {
+                        "path": "fulfillmentOrderLines[*].sourcingId"
+                    },
+                    {
+                        "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+                    }
+                ]
+            },
+            "getOrderDetails__cancelAnEntireOrder2TC07SS08GETOrderDetails": {
+                "basePath": "/order/${Auto_orderId07_}",
+                "doNotCompare": [
+                    {
+                        "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].estimatedShipDate"
+                    }
+                ]
+            },
+            "getfoDetails__cancelAnEntireOrder2TC07SS09GETFODetails": {
+                "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId07_}",
+                "doNotCompare": [
+                    {
+                        "path": "fulfillmentOrderLines[*].sourcingId"
+                    },
+                    {
+                        "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+                    }
+                ]
+            },
+            "addingNewLine__cancelAnEntireOrder2TC07SS10AddingNewLine": {
+                "basePath": "/order/${Auto_orderId07_}",
+                "doNotCompare": [
+                    {
+                        "path": "timestamp"
+                    },
+                    {
+                        "path": "requestId"
+                    }
+                ]
+            },
+            "getOrderDetails__cancelAnEntireOrder2TC07SS13GETOrderDetails": {
+                "basePath": "/order/${Auto_orderId07_}",
+                "doNotCompare": [
+                    {
+                        "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].estimatedShipDate"
+                    }
+                ]
+            },
+            "getfoDetails__cancelAnEntireOrder2TC07SS14GETFODetails": {
+                "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId07_}",
+                "doNotCompare": [
+                    {
+                        "path": "fulfillmentOrderLines[*].sourcingId"
+                    },
+                    {
+                        "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+                    }
+                ]
+            },
+            "cancelOrder__cancelAnEntireOrder2TC07SS15CancelOrder": {
+                "basePath": "/order/${Auto_orderId07_}",
+                "doNotCompare": [
+                    {
+                        "path": "requestId"
+                    },
+                    {
+                        "path": "timestamp"
+                    }
+                ]
+            },
+            "getOrderDetails__cancelAnEntireOrder2TC07SS18GETOrderDetails": {
+                "basePath": "/order/${Auto_orderId07_}",
+                "doNotCompare": [
+                    {
+                        "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].estimatedShipDate"
+                    }
+                ]
+            },
+            "getfoDetails__cancelAnEntireOrder2TC07SS19GETFODetails": {
+                "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId07_}",
+                "doNotCompare": [
+                    {
+                        "path": "fulfillmentOrderLines[*].sourcingId"
+                    },
+                    {
+                        "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+                    }
+                ]
+            },
+            "getOrderDetails__cancelAnEntireOrder2TC08SS02GETOrderDetails": {
+                "basePath": "/order/${Auto_orderId08_}",
+                "doNotCompare": [
+                    {
+                        "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].estimatedShipDate"
+                    }
+                ]
+            },
+            "getFulfillmentOrderId__cancelAnEntireOrder2TC08SS02GETFulfillmentOrderId": {
+                "basePath": "/order/${Auto_orderId08_}/fulfillment-orders",
+                "doNotCompare": [
+                    {
+                        "path": "payload"
+                    },
+                    {
+                        "path": "timestamp"
+                    },
+                    {
+                        "path": "requestId"
+                    }
+                ],
+                "paramsToSave": [
+                    {
+                        "name": "Auto_fulfillmentOrderId08_",
+                        "value": "payload[0].fulfillmentOrderId"
+                    },
+                    {
+                        "name": "Auto_fulfillmentOrderId08_lineId01_",
+                        "value": "payload[0].fulfillmentOrderLines[0].fulfillmentLineId"
+                    },
+                    {
+                        "name": "Auto_fulfillmentOrderId08_lineId02_",
+                        "value": "payload[0].fulfillmentOrderLines[1].fulfillmentLineId"
+                    },
+                    {
+                        "name": "Auto_fulfillmentOrderId08_lineId03_",
+                        "value": "payload[0].fulfillmentOrderLines[2].fulfillmentLineId"
+                    }
+                ]
+            },
+            "getfoDetails__cancelAnEntireOrder2TC08SS03GETFODetails": {
+                "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId08_}",
+                "doNotCompare": [
+                    {
+                        "path": "fulfillmentOrderLines[*].sourcingId"
+                    },
+                    {
+                        "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+                    }
+                ]
+            },
+            "getOrderDetails__cancelAnEntireOrder2TC08SS05GETOrderDetails": {
+                "basePath": "/order/${Auto_orderId08_}",
+                "doNotCompare": [
+                    {
+                        "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].estimatedShipDate"
+                    }
+                ]
+            },
+            "getfoDetails__cancelAnEntireOrder2TC08SS06GETFODetails": {
+                "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId08_}",
+                "doNotCompare": [
+                    {
+                        "path": "fulfillmentOrderLines[*].sourcingId"
+                    },
+                    {
+                        "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+                    }
+                ]
+            },
+            "getOrderDetails__cancelAnEntireOrder2TC08SS08GETOrderDetails": {
+                "basePath": "/order/${Auto_orderId08_}",
+                "doNotCompare": [
+                    {
+                        "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].estimatedShipDate"
+                    }
+                ]
+            },
+            "getfoDetails__cancelAnEntireOrder2TC08SS09GETFODetails": {
+                "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId08_}",
+                "doNotCompare": [
+                    {
+                        "path": "fulfillmentOrderLines[*].sourcingId"
+                    },
+                    {
+                        "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+                    }
+                ]
+            },
+            "addingNewLine__cancelAnEntireOrder2TC08SS10AddingNewLine": {
+                "basePath": "/order/${Auto_orderId08_}",
+                "doNotCompare": [
+                    {
+                        "path": "timestamp"
+                    },
+                    {
+                        "path": "requestId"
+                    }
+                ]
+            },
+            "getOrderDetails__cancelAnEntireOrder2TC08SS13GETOrderDetails": {
+                "basePath": "/order/${Auto_orderId08_}",
+                "doNotCompare": [
+                    {
+                        "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].estimatedShipDate"
+                    }
+                ]
+            },
+            "getfoDetails__cancelAnEntireOrder2TC08SS14GETFODetails": {
+                "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId08_}",
+                "doNotCompare": [
+                    {
+                        "path": "fulfillmentOrderLines[*].sourcingId"
+                    },
+                    {
+                        "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+                    }
+                ],
+                "paramsToSave": [
+                    {
+                        "name": "Auto_fulfillmentOrderId08_lineId04_",
+                        "value": "fulfillmentOrderLines[3].fulfillmentLineId"
+                    }
+                ]
+            },
+            "getOrderDetails__cancelAnEntireOrder2TC08SS16GETOrderDetails": {
+                "basePath": "/order/${Auto_orderId08_}",
+                "doNotCompare": [
+                    {
+                        "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].estimatedShipDate"
+                    }
+                ]
+            },
+            "getfoDetails__cancelAnEntireOrder2TC08SS17GETFODetails": {
+                "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId08_}",
+                "doNotCompare": [
+                    {
+                        "path": "fulfillmentOrderLines[*].sourcingId"
+                    },
+                    {
+                        "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+                    }
+                ]
+            },
+            "getOrderDetails__cancelAnEntireOrder2TC08SS19GETOrderDetails": {
+                "basePath": "/order/${Auto_orderId08_}",
+                "doNotCompare": [
+                    {
+                        "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].estimatedShipDate"
+                    }
+                ]
+            },
+            "getfoDetails__cancelAnEntireOrder2TC08SS20GETFODetails": {
+                "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId08_}",
+                "doNotCompare": [
+                    {
+                        "path": "fulfillmentOrderLines[*].sourcingId"
+                    },
+                    {
+                        "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+                    }
+                ]
+            },
+            "cancelOrder__cancelAnEntireOrder2TC08SS21CancelOrder": {
+                "basePath": "/order/${Auto_orderId08_}",
+                "doNotCompare": [
+                    {
+                        "path": "requestId"
+                    },
+                    {
+                        "path": "timestamp"
+                    }
+                ]
+            },
+            "getOrderDetails__cancelAnEntireOrder2TC08SS24GETOrderDetails": {
+                "basePath": "/order/${Auto_orderId08_}",
+                "doNotCompare": [
+                    {
+                        "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].estimatedShipDate"
+                    }
+                ]
+            },
+            "getfoDetails__cancelAnEntireOrder2TC08SS25GETFODetails": {
+                "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId08_}",
+                "doNotCompare": [
+                    {
+                        "path": "fulfillmentOrderLines[*].sourcingId"
+                    },
+                    {
+                        "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+                    }
+                ]
+            },
+            "getOrderDetails__cancelAnEntireOrder2TC09SS02GETOrderDetails": {
+                "basePath": "/order/${Auto_orderId09_}",
+                "doNotCompare": []
+            },
+            "getFulfillmentOrderId__cancelAnEntireOrder2TC09SS02GETFulfillmentOrderId": {
+                "basePath": "/order/${Auto_orderId09_}/fulfillment-orders",
+                "doNotCompare": [
+                    {
+                        "path": "payload"
+                    },
+                    {
+                        "path": "timestamp"
+                    },
+                    {
+                        "path": "requestId"
+                    }
+                ],
+                "paramsToSave": [
+                    {
+                        "name": "Auto_fulfillmentOrderId09_",
+                        "value": "payload[0].fulfillmentOrderId"
+                    },
+                    {
+                        "name": "Auto_fulfillmentOrderId09_lineId01_",
+                        "value": "payload[0].fulfillmentOrderLines[0].fulfillmentLineId"
+                    },
+                    {
+                        "name": "Auto_fulfillmentOrderId09_lineId02_",
+                        "value": "payload[0].fulfillmentOrderLines[1].fulfillmentLineId"
+                    },
+                    {
+                        "name": "Auto_fulfillmentOrderId09_lineId03_",
+                        "value": "payload[0].fulfillmentOrderLines[2].fulfillmentLineId"
+                    }
+                ]
+            },
+            "getfoDetails__cancelAnEntireOrder2TC09SS03GETFODetails": {
+                "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId09_}",
+                "doNotCompare": [
+                    {
+                        "path": "fulfillmentOrderLines[*].sourcingId"
+                    },
+                    {
+                        "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+                    }
+                ]
+            },
+            "getOrderDetails__cancelAnEntireOrder2TC09SS05GETOrderDetails": {
+                "basePath": "/order/${Auto_orderId09_}",
+                "doNotCompare": []
+            },
+            "getfoDetails__cancelAnEntireOrder2TC09SS06GETFODetails": {
+                "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId09_}",
+                "doNotCompare": [
+                    {
+                        "path": "fulfillmentOrderLines[*].sourcingId"
+                    },
+                    {
+                        "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+                    }
+                ]
+            },
+            "getOrderDetails__cancelAnEntireOrder2TC09SS08GETOrderDetails": {
+                "basePath": "/order/${Auto_orderId09_}",
+                "doNotCompare": []
+            },
+            "getfoDetails__cancelAnEntireOrder2TC09SS09GETFODetails": {
+                "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId09_}",
+                "doNotCompare": [
+                    {
+                        "path": "fulfillmentOrderLines[*].sourcingId"
+                    },
+                    {
+                        "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+                    }
+                ]
+            },
+            "increaseQuantity__cancelAnEntireOrder2TC09SS10IncreaseQuantity": {
+                "basePath": "/order/${Auto_orderId09_}",
+                "doNotCompare": [
+                    {
+                        "path": "timestamp"
+                    },
+                    {
+                        "path": "requestId"
+                    }
+                ]
+            },
+            "getOrderDetails__cancelAnEntireOrder2TC09SS13GETOrderDetails": {
+                "basePath": "/order/${Auto_orderId09_}",
+                "doNotCompare": []
+            },
+            "getfoDetails__cancelAnEntireOrder2TC09SS14GETFODetails": {
+                "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId09_}",
+                "doNotCompare": [
+                    {
+                        "path": "fulfillmentOrderLines[*].sourcingId"
+                    },
+                    {
+                        "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+                    }
+                ]
+            },
+            "cancelOrder__cancelAnEntireOrder2TC09SS15CancelOrder": {
+                "basePath": "/order/${Auto_orderId09_}",
+                "doNotCompare": [
+                    {
+                        "path": "requestId"
+                    },
+                    {
+                        "path": "timestamp"
+                    }
+                ]
+            },
+            "getOrderDetails__cancelAnEntireOrder2TC09SS18GETOrderDetails": {
+                "basePath": "/order/${Auto_orderId09_}",
+                "doNotCompare": [
+                    {
+                        "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+                    },
+                    {
+                        "path": "sourcingDetails[*].estimatedShipDate"
+                    }
+                ]
+            },
+            "getfoDetails__cancelAnEntireOrder2TC09SS19GETFODetails": {
+                "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId09_}",
+                "doNotCompare": [
+                    {
+                        "path": "fulfillmentOrderLines[*].sourcingId"
+                    },
+                    {
+                        "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+                    }
+                ]
+            }
+        }
+    }
+}

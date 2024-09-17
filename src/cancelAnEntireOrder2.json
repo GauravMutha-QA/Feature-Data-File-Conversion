@@ -1,0 +1,3099 @@
+{
+  "feature": {
+    "id": "cancelAnEntireOrder2",
+    "description": "This feature is to test cancelling an entire order (New features)",
+    "params": [
+      {
+        "name": "Auto_orderId05_"
+      },
+      {
+        "name": "Auto_orderId05_lineId01_"
+      },
+      {
+        "name": "Auto_orderId05_lineId02_"
+      },
+      {
+        "name": "Auto_orderId05_lineId03_"
+      },
+      {
+        "name": "Auto_orderId05_lineId04_"
+      },
+      {
+        "name": "Auto_orderId05_lineId05_"
+      },
+      {
+        "name": "Auto_orderId06_"
+      },
+      {
+        "name": "Auto_orderId06_lineId01_"
+      },
+      {
+        "name": "Auto_orderId06_lineId02_"
+      },
+      {
+        "name": "Auto_orderId06_lineId03_"
+      },
+      {
+        "name": "Auto_orderId06_lineId04_"
+      },
+      {
+        "name": "Auto_orderId07_"
+      },
+      {
+        "name": "Auto_orderId07_lineId01_"
+      },
+      {
+        "name": "Auto_orderId07_lineId02_"
+      },
+      {
+        "name": "Auto_orderId07_lineId03_"
+      },
+      {
+        "name": "Auto_orderId07_lineId04_"
+      },
+      {
+        "name": "Auto_orderId08_"
+      },
+      {
+        "name": "Auto_orderId08_lineId01_"
+      },
+      {
+        "name": "Auto_orderId08_lineId02_"
+      },
+      {
+        "name": "Auto_orderId08_lineId03_"
+      },
+      {
+        "name": "Auto_orderId08_lineId04_"
+      },
+      {
+        "name": "Auto_orderId09_"
+      },
+      {
+        "name": "Auto_orderId09_lineId01_"
+      }
+    ],
+    "timestamp": [
+      {
+        "name": "futureDateTimestamp_01",
+        "unit": "day",
+        "offset": "+1",
+        "format": "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+        "tz": "UTC"
+      },
+      {
+        "name": "futureDateTimestamp_02",
+        "unit": "day",
+        "offset": "+2",
+        "format": "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+        "tz": "UTC"
+      },
+      {
+        "name": "futureDateTimestamp_03",
+        "unit": "day",
+        "offset": "+2",
+        "format": "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+        "tz": "UTC"
+      }
+    ],
+    "scenarios": {
+      "cancelAnEntireOrder2_TC05_SS01_CreateOrder": {
+        "uservice": "nomapi",
+        "basePath": "/order/create",
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "orderCaptureTs"
+          },
+          {
+            "path": "statusAudits[*].statusDate"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC05_SS01_FulfillmentOrderUpdateKafka": {
+        "topicName": "INTERNAL.QA.NOM.FULFILLMENT_ORDER_UPDATE_EVENT",
+        "pollDuration": "60000",
+        "groupId": "automation",
+        "dependsOnPrevious": "false",
+        "kafkaFilters": [
+          {
+            "name": "orderId",
+            "value": "${Auto_orderId05_}"
+          },
+          {
+            "name": "status",
+            "value": "CREATED"
+          }
+        ],
+        "params": [
+          {
+            "name": "Auto_fulfillmentOrderId05_",
+            "value": "[0].fulfillmentOrderId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId05_lineId01_",
+            "value": "[0].fulfillmentOrderLines[0].fulfillmentLineId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId05_lineId02_",
+            "value": "[0].fulfillmentOrderLines[1].fulfillmentLineId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId05_lineId03_",
+            "value": "[0].fulfillmentOrderLines[2].fulfillmentLineId"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "[*].fulfillmentOrderId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].fulfillmentOrderId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].id"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].fulfillmentLineId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].sourcingId"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC05_SS02_GETOrderDetails": {
+        "uservice": "ors",
+        "basePath": "/order/${Auto_orderId05_}",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnStatusAudits",
+            "value": "false"
+          },
+          {
+            "name": "returnPaymentDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnSourcingDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].estimatedShipDate"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC05_SS02_GETFulfillmentOrderId": {
+        "uservice": "ors",
+        "basePath": "/order/${Auto_orderId05_}/fulfillment-orders",
+        "params": [
+          {
+            "name": "Auto_fulfillmentOrderId05_",
+            "value": "payload[0].fulfillmentOrderId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId05_lineId01_",
+            "value": "payload[0].fulfillmentOrderLines[0].fulfillmentLineId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId05_lineId02_",
+            "value": "payload[0].fulfillmentOrderLines[1].fulfillmentLineId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId05_lineId03_",
+            "value": "payload[0].fulfillmentOrderLines[2].fulfillmentLineId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId05_lineId04_",
+            "value": "payload[0].fulfillmentOrderLines[3].fulfillmentLineId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId05_lineId05_",
+            "value": "payload[0].fulfillmentOrderLines[4].fulfillmentLineId"
+          }
+        ],
+        "doNotCompare": [
+          {
+            "path": "payload"
+          },
+          {
+            "path": "timestamp"
+          },
+          {
+            "path": "requestId"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC05_SS03_GETFODetails": {
+        "uservice": "ors",
+        "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId05_}",
+        "dependsOnPrevious": "false",
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "fulfillmentOrderLines[*].sourcingId"
+          },
+          {
+            "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC05_SS04_PickStarted": {
+        "uservice": "ordercoordination",
+        "basePath": "/fulfillment-order/start-pick",
+        "dependsOnPrevious": "false",
+        "doNotCompare": [
+          {
+            "path": "requestId"
+          },
+          {
+            "path": "timestamp"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC05_SS05_GETOrderDetails": {
+        "uservice": "ors",
+        "basePath": "/order/${Auto_orderId05_}",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnStatusAudits",
+            "value": "false"
+          },
+          {
+            "name": "returnPaymentDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnSourcingDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].estimatedShipDate"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC05_SS06_GETFODetails": {
+        "uservice": "ors",
+        "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId05_}",
+        "dependsOnPrevious": "false",
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "fulfillmentOrderLines[*].sourcingId"
+          },
+          {
+            "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC05_SS07_PickComplete": {
+        "uservice": "ordercoordination",
+        "basePath": "/fulfillment-order/pick-complete",
+        "dependsOnPrevious": "false",
+        "doNotCompare": [
+          {
+            "path": "requestId"
+          },
+          {
+            "path": "timestamp"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC05_SS08_GETOrderDetails": {
+        "uservice": "ors",
+        "basePath": "/order/${Auto_orderId05_}",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnStatusAudits",
+            "value": "false"
+          },
+          {
+            "name": "returnPaymentDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnSourcingDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].estimatedShipDate"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC05_SS09_GETFODetails": {
+        "uservice": "ors",
+        "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId05_}",
+        "dependsOnPrevious": "false",
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "fulfillmentOrderLines[*].sourcingId"
+          },
+          {
+            "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC05_SS10_CancelOrderLines": {
+        "uservice": "nomapi",
+        "basePath": "/order/${Auto_orderId05_}",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC05_SS11_OrderUpdateKafka": {
+        "topicName": "INTERNAL.QA.NOM.ORDER_UPDATE_EVENT",
+        "pollDuration": "60000",
+        "groupId": "automation",
+        "dependsOnPrevious": "false",
+        "kafkaFilters": [
+          {
+            "name": "orderId",
+            "value": "${Auto_orderId05_}"
+          },
+          {
+            "name": "status",
+            "value": "CANCELLED"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "[*].sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "[*].sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "[*].sourcingDetails[*].estimatedShipDate"
+          },
+          {
+            "path": "[*].orderLineList[*].id"
+          },
+          {
+            "path": "[*].statusAudits[*].statusDate"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC05_SS12_FulfillmentOrderUpdateKafka": {
+        "topicName": "INTERNAL.QA.NOM.FULFILLMENT_ORDER_UPDATE_EVENT",
+        "pollDuration": "60000",
+        "groupId": "automation",
+        "dependsOnPrevious": "false",
+        "kafkaFilters": [
+          {
+            "name": "fulfillmentOrderId",
+            "value": "${Auto_fulfillmentOrderId05_}"
+          },
+          {
+            "name": "status",
+            "value": "CANCELLED"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "[*].fulfillmentOrderId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].fulfillmentOrderId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].id"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].fulfillmentLineId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].sourcingId"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC05_SS13_GETOrderDetails": {
+        "uservice": "ors",
+        "basePath": "/order/${Auto_orderId05_}",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnStatusAudits",
+            "value": "false"
+          },
+          {
+            "name": "returnPaymentDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnSourcingDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].estimatedShipDate"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC05_SS14_GETFODetails": {
+        "uservice": "ors",
+        "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId05_}",
+        "dependsOnPrevious": "false",
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "fulfillmentOrderLines[*].sourcingId"
+          },
+          {
+            "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC05_SS15_CancelOrder": {
+        "uservice": "nomapi",
+        "basePath": "/order/${Auto_orderId05_}",
+        "dependsOnPrevious": "false",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "doNotCompare": [
+          {
+            "path": "requestId"
+          },
+          {
+            "path": "timestamp"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC05_SS16_OrderUpdateKafka": {
+        "topicName": "INTERNAL.QA.NOM.ORDER_UPDATE_EVENT",
+        "pollDuration": "60000",
+        "groupId": "automation",
+        "dependsOnPrevious": "false",
+        "kafkaFilters": [
+          {
+            "name": "orderId",
+            "value": "${Auto_orderId05_}"
+          },
+          {
+            "name": "status",
+            "value": "CANCELLED"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "[*].sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "[*].sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "[*].sourcingDetails[*].estimatedShipDate"
+          },
+          {
+            "path": "[*].orderLineList[*].id"
+          },
+          {
+            "path": "[*].statusAudits[*].statusDate"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC05_SS17_FulfillmentOrderUpdateKafka": {
+        "topicName": "INTERNAL.QA.NOM.FULFILLMENT_ORDER_UPDATE_EVENT",
+        "pollDuration": "60000",
+        "groupId": "automation",
+        "dependsOnPrevious": "false",
+        "kafkaFilters": [
+          {
+            "name": "fulfillmentOrderId",
+            "value": "${Auto_fulfillmentOrderId05_}"
+          },
+          {
+            "name": "status",
+            "value": "CANCELLED"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "[*].fulfillmentOrderId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].fulfillmentOrderId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].id"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].fulfillmentLineId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].sourcingId"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC05_SS18_GETOrderDetails": {
+        "uservice": "ors",
+        "basePath": "/order/${Auto_orderId05_}",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnStatusAudits",
+            "value": "false"
+          },
+          {
+            "name": "returnPaymentDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnSourcingDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].estimatedShipDate"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC05_SS19_GETFODetails": {
+        "uservice": "ors",
+        "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId05_}",
+        "dependsOnPrevious": "false",
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "fulfillmentOrderLines[*].sourcingId"
+          },
+          {
+            "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC06_SS01_CreateOrder": {
+        "uservice": "nomapi",
+        "basePath": "/order/create",
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "orderCaptureTs"
+          },
+          {
+            "path": "statusAudits[*].statusDate"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC06_SS01_FulfillmentOrderUpdateKafka": {
+        "topicName": "INTERNAL.QA.NOM.FULFILLMENT_ORDER_UPDATE_EVENT",
+        "pollDuration": "60000",
+        "groupId": "automation",
+        "dependsOnPrevious": "false",
+        "kafkaFilters": [
+          {
+            "name": "orderId",
+            "value": "${Auto_orderId06_}"
+          },
+          {
+            "name": "status",
+            "value": "CREATED"
+          }
+        ],
+        "params": [
+          {
+            "name": "Auto_fulfillmentOrderId06_",
+            "value": "[0].fulfillmentOrderId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId06_lineId01_",
+            "value": "[0].fulfillmentOrderLines[0].fulfillmentLineId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId06_lineId02_",
+            "value": "[0].fulfillmentOrderLines[1].fulfillmentLineId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId06_lineId03_",
+            "value": "[0].fulfillmentOrderLines[2].fulfillmentLineId"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "[*].fulfillmentOrderId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].fulfillmentOrderId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].id"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].fulfillmentLineId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].sourcingId"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC06_SS02_GETOrderDetails": {
+        "uservice": "ors",
+        "basePath": "/order/${Auto_orderId06_}",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnStatusAudits",
+            "value": "false"
+          },
+          {
+            "name": "returnPaymentDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnSourcingDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].estimatedShipDate"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC06_SS02_GETFulfillmentOrderId": {
+        "uservice": "ors",
+        "basePath": "/order/${Auto_orderId06_}/fulfillment-orders",
+        "params": [
+          {
+            "name": "Auto_fulfillmentOrderId06_",
+            "value": "payload[0].fulfillmentOrderId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId06_lineId01_",
+            "value": "payload[0].fulfillmentOrderLines[0].fulfillmentLineId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId06_lineId02_",
+            "value": "payload[0].fulfillmentOrderLines[1].fulfillmentLineId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId06_lineId03_",
+            "value": "payload[0].fulfillmentOrderLines[2].fulfillmentLineId"
+          }
+        ],
+        "doNotCompare": [
+          {
+            "path": "payload"
+          },
+          {
+            "path": "timestamp"
+          },
+          {
+            "path": "requestId"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC06_SS03_GETFODetails": {
+        "uservice": "ors",
+        "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId06_}",
+        "dependsOnPrevious": "false",
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "fulfillmentOrderLines[*].sourcingId"
+          },
+          {
+            "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC06_SS04_AddingNewLine": {
+        "uservice": "nomapi",
+        "basePath": "/order/${Auto_orderId06_}",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "timestamp"
+          },
+          {
+            "path": "requestId"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC06_SS05_OrderUpdateKafka": {
+        "topicName": "INTERNAL.QA.NOM.ORDER_UPDATE_EVENT",
+        "pollDuration": "60000",
+        "groupId": "automation",
+        "dependsOnPrevious": "false",
+        "kafkaFilters": [
+          {
+            "name": "orderId",
+            "value": "${Auto_orderId06_}"
+          },
+          {
+            "name": "status",
+            "value": "FO_CREATED"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "[*].sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "[*].sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "[*].sourcingDetails[*].estimatedShipDate"
+          },
+          {
+            "path": "[*].orderLineList[*].id"
+          },
+          {
+            "path": "[*].statusAudits[*].statusDate"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC06_SS06_FulfillmentOrderUpdateKafka": {
+        "topicName": "INTERNAL.QA.NOM.FULFILLMENT_ORDER_UPDATE_EVENT",
+        "pollDuration": "60000",
+        "groupId": "automation",
+        "dependsOnPrevious": "false",
+        "kafkaFilters": [
+          {
+            "name": "fulfillmentOrderId",
+            "value": "${Auto_fulfillmentOrderId06_}"
+          },
+          {
+            "name": "status",
+            "value": "FO_CREATED"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "[*].fulfillmentOrderId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].fulfillmentOrderId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].id"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].fulfillmentLineId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].sourcingId"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC06_SS07_GETOrderDetails": {
+        "uservice": "ors",
+        "basePath": "/order/${Auto_orderId06_}",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnStatusAudits",
+            "value": "false"
+          },
+          {
+            "name": "returnPaymentDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnSourcingDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].estimatedShipDate"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC06_SS08_GETFODetails": {
+        "uservice": "ors",
+        "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId06_}",
+        "dependsOnPrevious": "false",
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "fulfillmentOrderLines[*].sourcingId"
+          },
+          {
+            "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC06_SS09_CancelOrder": {
+        "uservice": "nomapi",
+        "basePath": "/order/${Auto_orderId06_}",
+        "dependsOnPrevious": "false",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "doNotCompare": [
+          {
+            "path": "requestId"
+          },
+          {
+            "path": "timestamp"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC06_SS10_OrderUpdateKafka": {
+        "topicName": "INTERNAL.QA.NOM.ORDER_UPDATE_EVENT",
+        "pollDuration": "60000",
+        "groupId": "automation",
+        "dependsOnPrevious": "false",
+        "kafkaFilters": [
+          {
+            "name": "orderId",
+            "value": "${Auto_orderId06_}"
+          },
+          {
+            "name": "status",
+            "value": "CANCELLED"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "[*].sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "[*].sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "[*].sourcingDetails[*].estimatedShipDate"
+          },
+          {
+            "path": "[*].orderLineList[*].id"
+          },
+          {
+            "path": "[*].statusAudits[*].statusDate"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC06_SS11_FulfillmentOrderUpdateKafka": {
+        "topicName": "INTERNAL.QA.NOM.FULFILLMENT_ORDER_UPDATE_EVENT",
+        "pollDuration": "60000",
+        "groupId": "automation",
+        "dependsOnPrevious": "false",
+        "kafkaFilters": [
+          {
+            "name": "fulfillmentOrderId",
+            "value": "${Auto_fulfillmentOrderId06_}"
+          },
+          {
+            "name": "status",
+            "value": "CANCELLED"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "[*].fulfillmentOrderId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].fulfillmentOrderId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].id"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].fulfillmentLineId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].sourcingId"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC06_SS12_GETOrderDetails": {
+        "uservice": "ors",
+        "basePath": "/order/${Auto_orderId06_}",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnStatusAudits",
+            "value": "false"
+          },
+          {
+            "name": "returnPaymentDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnSourcingDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].estimatedShipDate"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC06_SS13_GETFODetails": {
+        "uservice": "ors",
+        "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId06_}",
+        "dependsOnPrevious": "false",
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "fulfillmentOrderLines[*].sourcingId"
+          },
+          {
+            "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC07_SS01_CreateOrder": {
+        "uservice": "nomapi",
+        "basePath": "/order/create",
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "orderCaptureTs"
+          },
+          {
+            "path": "statusAudits[*].statusDate"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC07_SS01_FulfillmentOrderUpdateKafka": {
+        "topicName": "INTERNAL.QA.NOM.FULFILLMENT_ORDER_UPDATE_EVENT",
+        "pollDuration": "60000",
+        "groupId": "automation",
+        "dependsOnPrevious": "false",
+        "kafkaFilters": [
+          {
+            "name": "orderId",
+            "value": "${Auto_orderId07_}"
+          },
+          {
+            "name": "status",
+            "value": "CREATED"
+          }
+        ],
+        "params": [
+          {
+            "name": "Auto_fulfillmentOrderId07_",
+            "value": "[0].fulfillmentOrderId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId07_lineId01_",
+            "value": "[0].fulfillmentOrderLines[0].fulfillmentLineId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId07_lineId02_",
+            "value": "[0].fulfillmentOrderLines[1].fulfillmentLineId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId07_lineId03_",
+            "value": "[0].fulfillmentOrderLines[2].fulfillmentLineId"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "[*].fulfillmentOrderId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].fulfillmentOrderId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].id"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].fulfillmentLineId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].sourcingId"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC07_SS02_GETOrderDetails": {
+        "uservice": "ors",
+        "basePath": "/order/${Auto_orderId07_}",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnStatusAudits",
+            "value": "false"
+          },
+          {
+            "name": "returnPaymentDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnSourcingDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].estimatedShipDate"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC07_SS02_GETFulfillmentOrderId": {
+        "uservice": "ors",
+        "basePath": "/order/${Auto_orderId07_}/fulfillment-orders",
+        "params": [
+          {
+            "name": "Auto_fulfillmentOrderId07_",
+            "value": "payload[0].fulfillmentOrderId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId07_lineId01_",
+            "value": "payload[0].fulfillmentOrderLines[0].fulfillmentLineId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId07_lineId02_",
+            "value": "payload[0].fulfillmentOrderLines[1].fulfillmentLineId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId07_lineId03_",
+            "value": "payload[0].fulfillmentOrderLines[2].fulfillmentLineId"
+          }
+        ],
+        "doNotCompare": [
+          {
+            "path": "payload"
+          },
+          {
+            "path": "timestamp"
+          },
+          {
+            "path": "requestId"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC07_SS03_GETFODetails": {
+        "uservice": "ors",
+        "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId07_}",
+        "dependsOnPrevious": "false",
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "fulfillmentOrderLines[*].sourcingId"
+          },
+          {
+            "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC07_SS04_PickStarted": {
+        "uservice": "ordercoordination",
+        "basePath": "/fulfillment-order/start-pick",
+        "dependsOnPrevious": "false",
+        "doNotCompare": [
+          {
+            "path": "requestId"
+          },
+          {
+            "path": "timestamp"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC07_SS05_GETOrderDetails": {
+        "uservice": "ors",
+        "basePath": "/order/${Auto_orderId07_}",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnStatusAudits",
+            "value": "false"
+          },
+          {
+            "name": "returnPaymentDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnSourcingDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].estimatedShipDate"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC07_SS06_GETFODetails": {
+        "uservice": "ors",
+        "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId07_}",
+        "dependsOnPrevious": "false",
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "fulfillmentOrderLines[*].sourcingId"
+          },
+          {
+            "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC07_SS07_PickComplete": {
+        "uservice": "ordercoordination",
+        "basePath": "/fulfillment-order/pick-complete",
+        "dependsOnPrevious": "false",
+        "doNotCompare": [
+          {
+            "path": "requestId"
+          },
+          {
+            "path": "timestamp"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC07_SS08_GETOrderDetails": {
+        "uservice": "ors",
+        "basePath": "/order/${Auto_orderId07_}",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnStatusAudits",
+            "value": "false"
+          },
+          {
+            "name": "returnPaymentDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnSourcingDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].estimatedShipDate"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC07_SS09_GETFODetails": {
+        "uservice": "ors",
+        "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId07_}",
+        "dependsOnPrevious": "false",
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "fulfillmentOrderLines[*].sourcingId"
+          },
+          {
+            "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC07_SS10_AddingNewLine": {
+        "uservice": "nomapi",
+        "basePath": "/order/${Auto_orderId07_}",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "timestamp"
+          },
+          {
+            "path": "requestId"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC07_SS11_OrderUpdateKafka": {
+        "topicName": "INTERNAL.QA.NOM.ORDER_UPDATE_EVENT",
+        "pollDuration": "60000",
+        "groupId": "automation",
+        "dependsOnPrevious": "false",
+        "kafkaFilters": [
+          {
+            "name": "orderId",
+            "value": "${Auto_orderId07_}"
+          },
+          {
+            "name": "status",
+            "value": "FO_CREATED"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "[*].sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "[*].sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "[*].sourcingDetails[*].estimatedShipDate"
+          },
+          {
+            "path": "[*].orderLineList[*].id"
+          },
+          {
+            "path": "[*].statusAudits[*].statusDate"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC07_SS12_FulfillmentOrderUpdateKafka": {
+        "topicName": "INTERNAL.QA.NOM.FULFILLMENT_ORDER_UPDATE_EVENT",
+        "pollDuration": "60000",
+        "groupId": "automation",
+        "dependsOnPrevious": "false",
+        "kafkaFilters": [
+          {
+            "name": "fulfillmentOrderId",
+            "value": "${Auto_fulfillmentOrderId07_}"
+          },
+          {
+            "name": "status",
+            "value": "FO_CREATED"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "[*].fulfillmentOrderId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].fulfillmentOrderId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].id"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].fulfillmentLineId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].sourcingId"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC07_SS13_GETOrderDetails": {
+        "uservice": "ors",
+        "basePath": "/order/${Auto_orderId07_}",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnStatusAudits",
+            "value": "false"
+          },
+          {
+            "name": "returnPaymentDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnSourcingDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].estimatedShipDate"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC07_SS14_GETFODetails": {
+        "uservice": "ors",
+        "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId07_}",
+        "dependsOnPrevious": "false",
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "fulfillmentOrderLines[*].sourcingId"
+          },
+          {
+            "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC07_SS15_CancelOrder": {
+        "uservice": "nomapi",
+        "basePath": "/order/${Auto_orderId07_}",
+        "dependsOnPrevious": "false",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "doNotCompare": [
+          {
+            "path": "requestId"
+          },
+          {
+            "path": "timestamp"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC07_SS16_OrderUpdateKafka": {
+        "topicName": "INTERNAL.QA.NOM.ORDER_UPDATE_EVENT",
+        "pollDuration": "60000",
+        "groupId": "automation",
+        "dependsOnPrevious": "false",
+        "kafkaFilters": [
+          {
+            "name": "orderId",
+            "value": "${Auto_orderId07_}"
+          },
+          {
+            "name": "status",
+            "value": "CANCELLED"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "[*].sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "[*].sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "[*].sourcingDetails[*].estimatedShipDate"
+          },
+          {
+            "path": "[*].orderLineList[*].id"
+          },
+          {
+            "path": "[*].statusAudits[*].statusDate"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC07_SS17_FulfillmentOrderUpdateKafka": {
+        "topicName": "INTERNAL.QA.NOM.FULFILLMENT_ORDER_UPDATE_EVENT",
+        "pollDuration": "60000",
+        "groupId": "automation",
+        "dependsOnPrevious": "false",
+        "kafkaFilters": [
+          {
+            "name": "fulfillmentOrderId",
+            "value": "${Auto_fulfillmentOrderId07_}"
+          },
+          {
+            "name": "status",
+            "value": "CANCELLED"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "[*].fulfillmentOrderId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].fulfillmentOrderId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].id"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].fulfillmentLineId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].sourcingId"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC07_SS18_GETOrderDetails": {
+        "uservice": "ors",
+        "basePath": "/order/${Auto_orderId07_}",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnStatusAudits",
+            "value": "false"
+          },
+          {
+            "name": "returnPaymentDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnSourcingDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].estimatedShipDate"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC07_SS19_GETFODetails": {
+        "uservice": "ors",
+        "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId07_}",
+        "dependsOnPrevious": "false",
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "fulfillmentOrderLines[*].sourcingId"
+          },
+          {
+            "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC08_SS01_CreateOrder": {
+        "uservice": "nomapi",
+        "basePath": "/order/create",
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "orderCaptureTs"
+          },
+          {
+            "path": "statusAudits[*].statusDate"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC08_SS01_FulfillmentOrderUpdateKafka": {
+        "topicName": "INTERNAL.QA.NOM.FULFILLMENT_ORDER_UPDATE_EVENT",
+        "pollDuration": "60000",
+        "groupId": "automation",
+        "dependsOnPrevious": "false",
+        "kafkaFilters": [
+          {
+            "name": "orderId",
+            "value": "${Auto_orderId08_}"
+          },
+          {
+            "name": "status",
+            "value": "CREATED"
+          }
+        ],
+        "params": [
+          {
+            "name": "Auto_fulfillmentOrderId08_",
+            "value": "[0].fulfillmentOrderId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId08_lineId01_",
+            "value": "[0].fulfillmentOrderLines[0].fulfillmentLineId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId08_lineId02_",
+            "value": "[0].fulfillmentOrderLines[1].fulfillmentLineId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId08_lineId03_",
+            "value": "[0].fulfillmentOrderLines[2].fulfillmentLineId"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "[*].fulfillmentOrderId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].fulfillmentOrderId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].id"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].fulfillmentLineId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].sourcingId"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC08_SS02_GETOrderDetails": {
+        "uservice": "ors",
+        "basePath": "/order/${Auto_orderId08_}",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnStatusAudits",
+            "value": "false"
+          },
+          {
+            "name": "returnPaymentDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnSourcingDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].estimatedShipDate"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC08_SS02_GETFulfillmentOrderId": {
+        "uservice": "ors",
+        "basePath": "/order/${Auto_orderId08_}/fulfillment-orders",
+        "params": [
+          {
+            "name": "Auto_fulfillmentOrderId08_",
+            "value": "payload[0].fulfillmentOrderId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId08_lineId01_",
+            "value": "payload[0].fulfillmentOrderLines[0].fulfillmentLineId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId08_lineId02_",
+            "value": "payload[0].fulfillmentOrderLines[1].fulfillmentLineId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId08_lineId03_",
+            "value": "payload[0].fulfillmentOrderLines[2].fulfillmentLineId"
+          }
+        ],
+        "doNotCompare": [
+          {
+            "path": "payload"
+          },
+          {
+            "path": "timestamp"
+          },
+          {
+            "path": "requestId"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC08_SS03_GETFODetails": {
+        "uservice": "ors",
+        "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId08_}",
+        "dependsOnPrevious": "false",
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "fulfillmentOrderLines[*].sourcingId"
+          },
+          {
+            "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC08_SS04_PickStarted": {
+        "uservice": "ordercoordination",
+        "basePath": "/fulfillment-order/start-pick",
+        "dependsOnPrevious": "false",
+        "doNotCompare": [
+          {
+            "path": "requestId"
+          },
+          {
+            "path": "timestamp"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC08_SS05_GETOrderDetails": {
+        "uservice": "ors",
+        "basePath": "/order/${Auto_orderId08_}",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnStatusAudits",
+            "value": "false"
+          },
+          {
+            "name": "returnPaymentDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnSourcingDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].estimatedShipDate"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC08_SS06_GETFODetails": {
+        "uservice": "ors",
+        "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId08_}",
+        "dependsOnPrevious": "false",
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "fulfillmentOrderLines[*].sourcingId"
+          },
+          {
+            "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC08_SS07_PickComplete": {
+        "uservice": "ordercoordination",
+        "basePath": "/fulfillment-order/pick-complete",
+        "dependsOnPrevious": "false",
+        "doNotCompare": [
+          {
+            "path": "requestId"
+          },
+          {
+            "path": "timestamp"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC08_SS08_GETOrderDetails": {
+        "uservice": "ors",
+        "basePath": "/order/${Auto_orderId08_}",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnStatusAudits",
+            "value": "false"
+          },
+          {
+            "name": "returnPaymentDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnSourcingDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].estimatedShipDate"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC08_SS09_GETFODetails": {
+        "uservice": "ors",
+        "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId08_}",
+        "dependsOnPrevious": "false",
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "fulfillmentOrderLines[*].sourcingId"
+          },
+          {
+            "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC08_SS10_AddingNewLine": {
+        "uservice": "nomapi",
+        "basePath": "/order/${Auto_orderId08_}",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "timestamp"
+          },
+          {
+            "path": "requestId"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC08_SS11_OrderUpdateKafka": {
+        "topicName": "INTERNAL.QA.NOM.ORDER_UPDATE_EVENT",
+        "pollDuration": "60000",
+        "groupId": "automation",
+        "dependsOnPrevious": "false",
+        "kafkaFilters": [
+          {
+            "name": "orderId",
+            "value": "${Auto_orderId08_}"
+          },
+          {
+            "name": "status",
+            "value": "FO_CREATED"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "[*].sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "[*].sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "[*].sourcingDetails[*].estimatedShipDate"
+          },
+          {
+            "path": "[*].orderLineList[*].id"
+          },
+          {
+            "path": "[*].statusAudits[*].statusDate"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC08_SS12_FulfillmentOrderUpdateKafka": {
+        "topicName": "INTERNAL.QA.NOM.FULFILLMENT_ORDER_UPDATE_EVENT",
+        "pollDuration": "60000",
+        "groupId": "automation",
+        "dependsOnPrevious": "false",
+        "kafkaFilters": [
+          {
+            "name": "fulfillmentOrderId",
+            "value": "${Auto_fulfillmentOrderId08_}"
+          },
+          {
+            "name": "status",
+            "value": "FO_CREATED"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "[*].fulfillmentOrderId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].fulfillmentOrderId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].id"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].fulfillmentLineId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].sourcingId"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC08_SS13_GETOrderDetails": {
+        "uservice": "ors",
+        "basePath": "/order/${Auto_orderId08_}",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnStatusAudits",
+            "value": "false"
+          },
+          {
+            "name": "returnPaymentDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnSourcingDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].estimatedShipDate"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC08_SS14_GETFODetails": {
+        "uservice": "ors",
+        "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId08_}",
+        "dependsOnPrevious": "false",
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "fulfillmentOrderLines[*].sourcingId"
+          },
+          {
+            "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+          }
+        ],
+        "params": [
+          {
+            "name": "Auto_fulfillmentOrderId08_lineId04_",
+            "value": "fulfillmentOrderLines[3].fulfillmentLineId"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC08_SS15_PickStarted": {
+        "uservice": "ordercoordination",
+        "basePath": "/fulfillment-order/start-pick",
+        "dependsOnPrevious": "false",
+        "doNotCompare": [
+          {
+            "path": "requestId"
+          },
+          {
+            "path": "timestamp"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC08_SS16_GETOrderDetails": {
+        "uservice": "ors",
+        "basePath": "/order/${Auto_orderId08_}",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnStatusAudits",
+            "value": "false"
+          },
+          {
+            "name": "returnPaymentDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnSourcingDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].estimatedShipDate"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC08_SS17_GETFODetails": {
+        "uservice": "ors",
+        "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId08_}",
+        "dependsOnPrevious": "false",
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "fulfillmentOrderLines[*].sourcingId"
+          },
+          {
+            "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC08_SS18_PickComplete": {
+        "uservice": "ordercoordination",
+        "basePath": "/fulfillment-order/pick-complete",
+        "dependsOnPrevious": "false",
+        "doNotCompare": [
+          {
+            "path": "requestId"
+          },
+          {
+            "path": "timestamp"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC08_SS19_GETOrderDetails": {
+        "uservice": "ors",
+        "basePath": "/order/${Auto_orderId08_}",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnStatusAudits",
+            "value": "false"
+          },
+          {
+            "name": "returnPaymentDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnSourcingDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].estimatedShipDate"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC08_SS20_GETFODetails": {
+        "uservice": "ors",
+        "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId08_}",
+        "dependsOnPrevious": "false",
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "fulfillmentOrderLines[*].sourcingId"
+          },
+          {
+            "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC08_SS21_CancelOrder": {
+        "uservice": "nomapi",
+        "basePath": "/order/${Auto_orderId08_}",
+        "dependsOnPrevious": "false",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "doNotCompare": [
+          {
+            "path": "requestId"
+          },
+          {
+            "path": "timestamp"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC08_SS22_OrderUpdateKafka": {
+        "topicName": "INTERNAL.QA.NOM.ORDER_UPDATE_EVENT",
+        "pollDuration": "60000",
+        "groupId": "automation",
+        "dependsOnPrevious": "false",
+        "kafkaFilters": [
+          {
+            "name": "orderId",
+            "value": "${Auto_orderId08_}"
+          },
+          {
+            "name": "status",
+            "value": "CANCELLED"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "[*].sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "[*].sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "[*].sourcingDetails[*].estimatedShipDate"
+          },
+          {
+            "path": "[*].orderLineList[*].id"
+          },
+          {
+            "path": "[*].statusAudits[*].statusDate"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC08_SS23_FulfillmentOrderUpdateKafka": {
+        "topicName": "INTERNAL.QA.NOM.FULFILLMENT_ORDER_UPDATE_EVENT",
+        "pollDuration": "60000",
+        "groupId": "automation",
+        "dependsOnPrevious": "false",
+        "kafkaFilters": [
+          {
+            "name": "fulfillmentOrderId",
+            "value": "${Auto_fulfillmentOrderId08_}"
+          },
+          {
+            "name": "status",
+            "value": "CANCELLED"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "[*].fulfillmentOrderId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].fulfillmentOrderId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].id"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].fulfillmentLineId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].sourcingId"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC08_SS24_GETOrderDetails": {
+        "uservice": "ors",
+        "basePath": "/order/${Auto_orderId08_}",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnStatusAudits",
+            "value": "false"
+          },
+          {
+            "name": "returnPaymentDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnSourcingDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].estimatedShipDate"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC08_SS25_GETFODetails": {
+        "uservice": "ors",
+        "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId08_}",
+        "dependsOnPrevious": "false",
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "fulfillmentOrderLines[*].sourcingId"
+          },
+          {
+            "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC09_SS01_CreateOrder": {
+        "uservice": "nomapi",
+        "basePath": "/order/create",
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "orderCaptureTs"
+          },
+          {
+            "path": "statusAudits[*].statusDate"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC09_SS01_FulfillmentOrderUpdateKafka": {
+        "topicName": "INTERNAL.QA.NOM.FULFILLMENT_ORDER_UPDATE_EVENT",
+        "pollDuration": "60000",
+        "groupId": "automation",
+        "dependsOnPrevious": "false",
+        "kafkaFilters": [
+          {
+            "name": "orderId",
+            "value": "${Auto_orderId05_}"
+          },
+          {
+            "name": "status",
+            "value": "CREATED"
+          }
+        ],
+        "params": [
+          {
+            "name": "Auto_fulfillmentOrderId09_",
+            "value": "[0].fulfillmentOrderId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId09_lineId01_",
+            "value": "[0].fulfillmentOrderLines[0].fulfillmentLineId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId09_lineId02_",
+            "value": "[0].fulfillmentOrderLines[1].fulfillmentLineId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId09_lineId03_",
+            "value": "[0].fulfillmentOrderLines[2].fulfillmentLineId"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "[*].fulfillmentOrderId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].fulfillmentOrderId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].id"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].fulfillmentLineId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].sourcingId"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC09_SS02_GETOrderDetails": {
+        "uservice": "ors",
+        "basePath": "/order/${Auto_orderId09_}",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnStatusAudits",
+            "value": "false"
+          },
+          {
+            "name": "returnPaymentDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnSourcingDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC09_SS02_GETFulfillmentOrderId": {
+        "uservice": "ors",
+        "basePath": "/order/${Auto_orderId09_}/fulfillment-orders",
+        "params": [
+          {
+            "name": "Auto_fulfillmentOrderId09_",
+            "value": "payload[0].fulfillmentOrderId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId09_lineId01_",
+            "value": "payload[0].fulfillmentOrderLines[0].fulfillmentLineId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId09_lineId02_",
+            "value": "payload[0].fulfillmentOrderLines[1].fulfillmentLineId"
+          },
+          {
+            "name": "Auto_fulfillmentOrderId09_lineId03_",
+            "value": "payload[0].fulfillmentOrderLines[2].fulfillmentLineId"
+          }
+        ],
+        "doNotCompare": [
+          {
+            "path": "payload"
+          },
+          {
+            "path": "timestamp"
+          },
+          {
+            "path": "requestId"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC09_SS03_GETFODetails": {
+        "uservice": "ors",
+        "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId09_}",
+        "dependsOnPrevious": "false",
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "fulfillmentOrderLines[*].sourcingId"
+          },
+          {
+            "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC09_SS04_PickStarted": {
+        "uservice": "ordercoordination",
+        "basePath": "/fulfillment-order/start-pick",
+        "dependsOnPrevious": "false",
+        "doNotCompare": [
+          {
+            "path": "requestId"
+          },
+          {
+            "path": "timestamp"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC09_SS05_GETOrderDetails": {
+        "uservice": "ors",
+        "basePath": "/order/${Auto_orderId09_}",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnStatusAudits",
+            "value": "false"
+          },
+          {
+            "name": "returnPaymentDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnSourcingDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC09_SS06_GETFODetails": {
+        "uservice": "ors",
+        "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId09_}",
+        "dependsOnPrevious": "false",
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "fulfillmentOrderLines[*].sourcingId"
+          },
+          {
+            "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC09_SS07_PickComplete": {
+        "uservice": "ordercoordination",
+        "basePath": "/fulfillment-order/pick-complete",
+        "dependsOnPrevious": "false",
+        "doNotCompare": [
+          {
+            "path": "requestId"
+          },
+          {
+            "path": "timestamp"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC09_SS08_GETOrderDetails": {
+        "uservice": "ors",
+        "basePath": "/order/${Auto_orderId09_}",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnStatusAudits",
+            "value": "false"
+          },
+          {
+            "name": "returnPaymentDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnSourcingDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC09_SS09_GETFODetails": {
+        "uservice": "ors",
+        "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId09_}",
+        "dependsOnPrevious": "false",
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "fulfillmentOrderLines[*].sourcingId"
+          },
+          {
+            "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC09_SS10_IncreaseQuantity": {
+        "uservice": "nomapi",
+        "basePath": "/order/${Auto_orderId09_}",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "timestamp"
+          },
+          {
+            "path": "requestId"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC09_SS11_OrderUpdateKafka": {
+        "topicName": "INTERNAL.QA.NOM.ORDER_UPDATE_EVENT",
+        "pollDuration": "60000",
+        "groupId": "automation",
+        "dependsOnPrevious": "false",
+        "kafkaFilters": [
+          {
+            "name": "orderId",
+            "value": "${Auto_orderId09_}"
+          },
+          {
+            "name": "status",
+            "value": "PICKING_COMPLETED"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "[*].sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "[*].sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "[*].sourcingDetails[*].estimatedShipDate"
+          },
+          {
+            "path": "[*].orderLineList[*].id"
+          },
+          {
+            "path": "[*].statusAudits[*].statusDate"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC09_SS12_FulfillmentOrderUpdateKafka": {
+        "topicName": "INTERNAL.QA.NOM.FULFILLMENT_ORDER_UPDATE_EVENT",
+        "pollDuration": "60000",
+        "groupId": "automation",
+        "dependsOnPrevious": "false",
+        "kafkaFilters": [
+          {
+            "name": "fulfillmentOrderId",
+            "value": "${Auto_fulfillmentOrderId09_}"
+          },
+          {
+            "name": "status",
+            "value": "PICKING_COMPLETED"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "[*].fulfillmentOrderId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].fulfillmentOrderId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].id"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].fulfillmentLineId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].sourcingId"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC09_SS13_GETOrderDetails": {
+        "uservice": "ors",
+        "basePath": "/order/${Auto_orderId09_}",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnStatusAudits",
+            "value": "false"
+          },
+          {
+            "name": "returnPaymentDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnSourcingDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC09_SS14_GETFODetails": {
+        "uservice": "ors",
+        "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId09_}",
+        "dependsOnPrevious": "false",
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "fulfillmentOrderLines[*].sourcingId"
+          },
+          {
+            "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC09_SS15_CancelOrder": {
+        "uservice": "nomapi",
+        "basePath": "/order/${Auto_orderId09_}",
+        "dependsOnPrevious": "false",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "doNotCompare": [
+          {
+            "path": "requestId"
+          },
+          {
+            "path": "timestamp"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC09_SS16_OrderUpdateKafka": {
+        "topicName": "INTERNAL.QA.NOM.ORDER_UPDATE_EVENT",
+        "pollDuration": "60000",
+        "groupId": "automation",
+        "dependsOnPrevious": "false",
+        "kafkaFilters": [
+          {
+            "name": "orderId",
+            "value": "${Auto_orderId09_}"
+          },
+          {
+            "name": "status",
+            "value": "CANCELLED"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "[*].sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "[*].sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "[*].sourcingDetails[*].estimatedShipDate"
+          },
+          {
+            "path": "[*].orderLineList[*].id"
+          },
+          {
+            "path": "[*].statusAudits[*].statusDate"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC09_SS17_FulfillmentOrderUpdateKafka": {
+        "topicName": "INTERNAL.QA.NOM.FULFILLMENT_ORDER_UPDATE_EVENT",
+        "pollDuration": "60000",
+        "groupId": "automation",
+        "dependsOnPrevious": "false",
+        "kafkaFilters": [
+          {
+            "name": "fulfillmentOrderId",
+            "value": "${Auto_fulfillmentOrderId09_}"
+          },
+          {
+            "name": "status",
+            "value": "CANCELLED"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "[*].fulfillmentOrderId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].fulfillmentOrderId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].id"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].fulfillmentLineId"
+          },
+          {
+            "path": "[*].fulfillmentOrderLines[*].sourcingId"
+          }
+        ]
+      },
+      "cancelAnEntireOrder2_TC09_SS18_GETOrderDetails": {
+        "uservice": "ors",
+        "basePath": "/order/${Auto_orderId09_}",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnStatusAudits",
+            "value": "false"
+          },
+          {
+            "name": "returnPaymentDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnSourcingDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].estimatedShipDate"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder2_TC09_SS19_GETFODetails": {
+        "uservice": "ors",
+        "basePath": "/fulfillment-order/${Auto_fulfillmentOrderId09_}",
+        "dependsOnPrevious": "false",
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "fulfillmentOrderLines[*].sourcingId"
+          },
+          {
+            "path": "fulfillmentOrderLines[*].fulfillmentLineId"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ]
+      }
+    }
+  }
+}

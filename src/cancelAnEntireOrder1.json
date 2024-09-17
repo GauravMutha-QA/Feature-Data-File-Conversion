@@ -1,0 +1,92 @@
+{
+  "feature": {
+    "id": "cancelAnEntireOrder1",
+    "scenarios": {
+      "cancelAnEntireOrder1_TC01_SS01_CreateOrder": {
+        "uservice": "nomapi",
+        "basePath": "/order/create",
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "orderCaptureTs"
+          },
+          {
+            "path": "statusAudits[*].statusDate"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      },
+      "cancelAnEntireOrder1_TC01_SS02_OrderUpdateKafka": {
+        "topicName": "INTERNAL.QA.NOM.ORDER_UPDATE_EVENT",
+        "pollDuration": "60000",
+        "groupId": "automation",
+        "dependsOnPrevious": "false",
+        "kafkaFilters": [
+          {
+            "name": "orderId",
+            "value": "${Auto_orderId01_}"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "[*].sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "[*].sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "[*].sourcingDetails[*].estimatedShipDate"
+          },
+          {
+            "path": "[*].orderLineList[*].id"
+          },
+          {
+            "path": "[*].statusAudits[*].statusDate"
+          }
+        ]
+      },
+      "cancelAnEntireOrder1_TC01_SS04_GETOrderDetails": {
+        "uservice": "ors",
+        "basePath": "/order/${Auto_orderId01_}",
+        "headerParams": [
+          {
+            "name": "x-tenant-Id",
+            "value": "NEXTUPLE_GR"
+          }
+        ],
+        "queryParams": [
+          {
+            "name": "returnStatusAudits",
+            "value": "false"
+          },
+          {
+            "name": "returnPaymentDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnSourcingDetails",
+            "value": "true"
+          },
+          {
+            "name": "returnCustomerInfo",
+            "value": "true"
+          }
+        ],
+        "compareMode": "lenient",
+        "doNotCompare": [
+          {
+            "path": "sourcingDetails[*].startEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].endEstimatedDeliveryDate"
+          },
+          {
+            "path": "sourcingDetails[*].estimatedShipDate"
+          }
+        ],
+        "dependsOnPrevious": "false"
+      }
+    }
+  }
+}
