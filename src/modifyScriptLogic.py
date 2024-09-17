@@ -5,6 +5,12 @@ import re
 input_file_path = "/home/gaurav/Desktop/SampleConversion/src/cancelAnEntireOrder2.json"
 output_file_path = "/home/gaurav/Desktop/SampleConversion/src/modified_cancelAnEntireOrder2.json"
 
+# Dictionary for Exceptional API name suffix in scenario names
+exception_transforms = {
+    "GETFulfillmentOrderId": "getFOList",
+    "GETFODetails": "getFODetails",
+}
+
 
 # Function to convert to camel case
 def to_camel_case(s):
@@ -14,22 +20,32 @@ def to_camel_case(s):
     return components[0].lower()
 
 
+# Function to process keys and handle exceptions
 def process_key(key):
     parts = key.split('_')
     last_word = parts[-1]
 
-    camel_case_last_word = ""
-    for i, char in enumerate(last_word):
-        if char.islower():
-            if i > 0 and last_word[i - 1].isupper() and i == 1:
-                camel_case_last_word = last_word[0].lower() + last_word[1:]
-            else:
-                camel_case_last_word = last_word[:i - 1].lower() + last_word[i - 1:]
-            break
+    # Check if the last word is in the exception list
+    if last_word in exception_transforms:
+        transformed_last_word = exception_transforms[last_word]
+    else:
+        # Convert last_word to camel case if it's not in the exceptions
+        camel_case_last_word = ""
+        for i, char in enumerate(last_word):
+            if char.islower():
+                if i > 0 and last_word[i - 1].isupper() and i == 1:
+                    camel_case_last_word = last_word[0].lower() + last_word[1:]
+                else:
+                    camel_case_last_word = last_word[:i - 1].lower() + last_word[i - 1:]
+                break
+        else:
+            camel_case_last_word = last_word.lower()
+
+        transformed_last_word = camel_case_last_word
 
     # Create the new key
     original_key_no_underscores = ''.join(parts[:-1]) + last_word
-    new_key = f"{camel_case_last_word}__{original_key_no_underscores}"
+    new_key = f"{transformed_last_word}__{original_key_no_underscores}"
 
     return new_key
 
