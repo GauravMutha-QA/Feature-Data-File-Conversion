@@ -1,9 +1,17 @@
 import json
 import re
+import os
+
+# Enter feature file name here
+feature_file_name = "cancelAnEntireOrder1.json"
 
 # File paths
-input_file_path = "/home/gaurav/Desktop/SampleConversion/src/cancelAnEntireOrder2.json"
-output_file_path = "/home/gaurav/Desktop/SampleConversion/src/modified_cancelAnEntireOrder2.json"
+input_file_path = os.path.join("/home/gaurav/Desktop/SampleConversion/src", feature_file_name)
+output_dir_path = os.path.join("/home/gaurav/Desktop/SampleConversion/src/scenarioData", os.path.splitext(feature_file_name)[0])
+
+# Ensure the output directory exists (without .json in the directory name)
+os.makedirs(output_dir_path, exist_ok=True)
+
 
 # Dictionary for Exceptional API name suffix in scenario names
 exception_transforms = {
@@ -54,8 +62,15 @@ def process_key(key):
 with open(input_file_path, 'r') as infile:
     data = json.load(infile)
 
-# Create a new dictionary for the modified JSON
-modified_data = {
+# Extract all unique TC types
+tc_types = set()
+for scenario_key in data["feature"]["scenarios"].keys():
+    match = re.search(r'TC\d+', scenario_key)
+    if match:
+        tc_types.add(match.group())
+
+# Create a base modified data structure
+base_modified_data = {
     "scenario": {
         "id": data["feature"].get("id"),
         "description": data["feature"].get("description"),
@@ -65,46 +80,52 @@ modified_data = {
     }
 }
 
-# Modify "scenarios" to "steps" and process the fields
-for scenario_key, scenario_value in data["feature"]["scenarios"].items():
-    # Remove specific fields
-    for field in ['uservice', 'compareMode', 'dependsOnPrevious', 'headerParams']:
-        if field in scenario_value:
-            del scenario_value[field]
+# Create separate files for each TC type
+for tc_type in tc_types:
+    modified_data = base_modified_data.copy()
+    modified_data["scenario"]["steps"] = {}
 
-    # Check if 'basePath' contains '$'
-    base_path_has_dollar = 'basePath' in scenario_value and '$' in scenario_value['basePath']
+    for scenario_key, scenario_value in data["feature"]["scenarios"].items():
+        if tc_type in scenario_key:
+            # Remove specific fields
+            for field in ['uservice', 'compareMode', 'dependsOnPrevious', 'headerParams']:
+                if field in scenario_value:
+                    del scenario_value[field]
 
-    # Process queryParams if present and check for '$'
-    if 'queryParams' in scenario_value:
-        scenario_value['queryParams'] = [
-            qp for qp in scenario_value['queryParams']
-            if '$' in qp.get('value', '')
-        ]
-        query_params_has_dollar = any('$' in qp.get('value', '') for qp in scenario_value['queryParams'])
+            # Check if 'basePath' contains '$'
+            base_path_has_dollar = 'basePath' in scenario_value and '$' in scenario_value['basePath']
 
-        # Remove queryParams if it has no elements left
-        if not scenario_value['queryParams']:
-            del scenario_value['queryParams']
-    else:
-        query_params_has_dollar = False
+            # Process queryParams if present and check for '$'
+            if 'queryParams' in scenario_value:
+                scenario_value['queryParams'] = [
+                    qp for qp in scenario_value['queryParams']
+                    if '$' in qp.get('value', '')
+                ]
+                query_params_has_dollar = any('$' in qp.get('value', '') for qp in scenario_value['queryParams'])
 
-    # Skip the scenario if neither basePath nor queryParams contain '$'
-    if not base_path_has_dollar and not query_params_has_dollar:
-        continue
+                # Remove queryParams if it has no elements left
+                if not scenario_value['queryParams']:
+                    del scenario_value['queryParams']
+            else:
+                query_params_has_dollar = False
 
-    # Rename 'params' to 'paramsToSave' inside the scenario
-    if 'params' in scenario_value:
-        scenario_value['paramsToSave'] = scenario_value.pop('params')
+            # Skip the scenario if neither basePath nor queryParams contain '$'
+            if not base_path_has_dollar and not query_params_has_dollar:
+                continue
 
-    # Generate the new key for the scenario
-    new_key = process_key(scenario_key)
+            # Rename 'params' to 'paramsToSave' inside the scenario
+            if 'params' in scenario_value:
+                scenario_value['paramsToSave'] = scenario_value.pop('params')
 
-    # Add the modified scenario to the "steps" field
-    modified_data["scenario"]["steps"][new_key] = scenario_value
+            # Generate the new key for the scenario
+            new_key = process_key(scenario_key)
 
-# Write the modified content to a new JSON file
-with open(output_file_path, 'w') as outfile:
-    json.dump(modified_data, outfile, indent=4)
+            # Add the modified scenario to the "steps" field
+            modified_data["scenario"]["steps"][new_key] = scenario_value
 
-print(f"Modified file created at: {output_file_path}")
+    # Write the modified content to a new JSON file
+    output_file_path = os.path.join(output_dir_path, f"cancelAnEntireOrder2_{tc_type}.json")
+    with open(output_file_path, 'w') as outfile:
+        json.dump(modified_data, outfile, indent=4)
+
+    print(f"Modified file created at: {output_file_path}")
