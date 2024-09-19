@@ -1,23 +1,23 @@
+from config import FEATURE_FILE_NAME, FEATUREDATA_DIR_PATH, SCENARIODATA_DIR_PATH, DICTIONARY_API
+
+
 import json
 import re
 import os
 
 # Enter feature file name here
-feature_file_name = "cancelAnEntireOrder1.json"
+featureDataFileName = FEATURE_FILE_NAME+".json"
 
 # File paths
-input_file_path = os.path.join("/home/gaurav/Desktop/SampleConversion/src", feature_file_name)
-output_dir_path = os.path.join("/home/gaurav/Desktop/SampleConversion/src/scenarioData", os.path.splitext(feature_file_name)[0])
+input_file_path = os.path.join(FEATUREDATA_DIR_PATH, featureDataFileName)
+output_dir_path = os.path.join(SCENARIODATA_DIR_PATH, os.path.splitext(featureDataFileName)[0])
 
 # Ensure the output directory exists (without .json in the directory name)
 os.makedirs(output_dir_path, exist_ok=True)
 
 
 # Dictionary for Exceptional API name suffix in scenario names
-exception_transforms = {
-    "GETFulfillmentOrderId": "getFOList",
-    "GETFODetails": "getFODetails",
-}
+exception_transforms = DICTIONARY_API
 
 
 # Function to convert to camel case
@@ -124,7 +124,7 @@ for tc_type in tc_types:
             modified_data["scenario"]["steps"][new_key] = scenario_value
 
     # Write the modified content to a new JSON file
-    output_file_path = os.path.join(output_dir_path, f"cancelAnEntireOrder2_{tc_type}.json")
+    output_file_path = os.path.join(output_dir_path, f"{FEATURE_FILE_NAME}_{tc_type}.json")
     with open(output_file_path, 'w') as outfile:
         json.dump(modified_data, outfile, indent=4)
 
